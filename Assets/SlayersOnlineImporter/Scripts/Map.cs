@@ -26,4 +26,12 @@ public class Map
     public void SetHigh(int x, int y, int tileX, int tileY) {
         mapHigh[x,y] = new Vector2(tileX, tileY);
     }
+
+    public Vector2 GetLow(int x, int y) {
+        return mapLow[x,y];
+    }
+
+    public Vector2 GetHigh(int x, int y) {
+        return mapHigh[x,y];
+    }
 }

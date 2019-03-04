@@ -2,31 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Tilemaps;
+using UnityEditor;
 
+[ExecuteInEditMode]
 public class Importer : MonoBehaviour
 {
+    public string projectFile;
+
     Project project;
+    Tilemap high;
+    Tilemap low;
 
     void Start() {
-        ReadProject("Assets/SlayersOnlineImporter/Files/test2.prj");
-        Debug.Log(project.maps[0].name + ", " + project.maps[0].chipset + ", " + project.maps[0].width + ", " + project.maps[0].height);
+        high = this.transform.Find("Haute").GetComponent<Tilemap>();
+        low = this.transform.Find("Basse").GetComponent<Tilemap>();
+
+        ReadProject(projectFile);
+        ReadMaps();
+
+        Render();
     }
 
     void ReadMaps() {
         Map[] maps = project.maps;
-        
+        string[] split = projectFile.Split('/');
+        string folder = "";
+        for(int i = 0; i < split.Length - 1; i++) {
+            folder += split[i] + "/";
+        }
+
         for(int i = 0; i < maps.Length; i++) {
-            StreamReader streamReader = new StreamReader("Assets/SlayersOnlineImporter/Files/" + maps[i].name + ".map");
-            for(int x = 0; x < maps[i].width; x++) {
-                for(int y = 0; y < maps[i].height; y++) {
-                    while(!streamReader.EndOfStream) {
+            StreamReader streamReader = new StreamReader(folder + "Map/" + maps[i].name + ".map");
+            for(int y = 0; y < maps[i].height; y++) {
+                for(int x = 0; x < maps[i].width; x++) {
+                    if(!streamReader.EndOfStream) {
                         int xBasse = int.Parse(streamReader.ReadLine());
                         int xHaute = int.Parse(streamReader.ReadLine());
                         int yBasse = int.Parse(streamReader.ReadLine());
                         int yHaute = int.Parse(streamReader.ReadLine());
 
-                        maps[i].SetLow(0, 0, xBasse, yBasse);
-                        maps[i].SetHigh(0, 0, xHaute, yHaute);
+                        maps[i].SetLow(x, y, xBasse, yBasse);
+                        maps[i].SetHigh(x, y, xHaute, yHaute);
                     }
                 }
             }
@@ -35,6 +52,12 @@ public class Importer : MonoBehaviour
     }
 
     void ReadProject(string name) {
+        string[] split = projectFile.Split('/');
+        string folder = "";
+        for(int i = 0; i < split.Length - 1; i++) {
+            folder += split[i] + "/";
+        }
+
         int nbMaps = (int)new System.IO.FileInfo(name).Length / 777;
         project = new Project(nbMaps);
 
@@ -63,7 +86,9 @@ public class Importer : MonoBehaviour
                 chipset += (char)streamReader.Read();
                 pos++;
             }
-            Debug.Log(pos);
+            chipset = folder + chipset;
+            chipset = chipset.Replace('\\', '/');
+            Debug.Log(chipset);
             for(; pos < 206; pos++) {
                 streamReader.Read();
             }
@@ -84,5 +109,24 @@ public class Importer : MonoBehaviour
         }
 
         streamReader.Close();
+    }
+
+    void Render() {
+        for(int i = 0; i < project.maps.Length; i++) {
+            high.size = new Vector3Int(project.maps[i].width, project.maps[i].height, 0);
+            low.size = new Vector3Int(project.maps[i].width, project.maps[i].height, 0);
+            
+            Object[] sprites = AssetDatabase.LoadAllAssetsAtPath(project.maps[i].chipset);
+            string chipset = project.maps[i].chipset.Replace(".png", "");
+            for(int x = 0; x < project.maps[i].width; x++) {
+                for(int y = 0; y < project.maps[i].height; y++) {
+                    Tile tile = new Tile();
+                    int spriteNbr = (int) (project.maps[i].GetLow(x,y).x - 1 + (project.maps[i].GetLow(x,y).y - 1) * 30 );
+                    tile.sprite = (Sprite) sprites[spriteNbr];
+
+                    low.SetTile(new Vector3Int(x, y, 0), tile);
+                }
+            }
+        }
     }
 }
