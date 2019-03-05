@@ -28,3 +28,31 @@ Les cartes sont codé de la manière suivante :
 - X couche haute
 - Y couche basse
 - Y couche haute
+
+### Les fichiers .zon
+
+Les fichiers .zon sont nommé en fonction des différentes maps. Leur codage est le suivant :
+
+- Xstart de la zone (2 octets)
+- 0x00 x2
+- Xend de la zone (2 octets)
+- 0x00 x2
+- Ystart de la zone (2 octets)
+- 0x00 x2
+- Yend de la zone (2 octets)
+- 0x00 x2
+- 0x00 x4
+- Nombre max de mob (2 octets)
+- 0x00 x4
+- Type (4 octets, à noté que "spawn interdit" est codé comme ceci : ffff ffff)
+- ???? x4 (character qui semblent aléatoire, peut être ils ont une signification, mais je vois pas)
+- Vitesse spawn (2 octets)
+- taille du nom variable server (Y) (1 octets)
+- nom de variable (Y octets)
+- 0x00 jusque 292
+- taille de la valeur assigné à la variable (Z) (1 octets)
+- valeur (Z octets)
+- 0x00 jusque 547
+
+Chaque zone est donc codée sur 548 caractères, il peut y avoir plusieurs zone dans le même fichier,
+le codage ne change pas en fonction du nombre de zone.
