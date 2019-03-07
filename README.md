@@ -56,3 +56,26 @@ Les fichiers .zon sont nommé en fonction des différentes maps. Leur codage est
 
 Chaque zone est donc codée sur 548 caractères, il peut y avoir plusieurs zone dans le même fichier,
 le codage ne change pas en fonction du nombre de zone.
+
+### Les fichiers evn
+
+taille d'un evn 344 par page ou evn
+
+- taille du nom de l'evn (1 octet X)
+- nom de l'evn (X octets)
+- 51 -> taille du nom du chipset (1 octet Y)
+- chipset (Y octets)
+- 308 -> pos X (1 octets)
+- 312 -> pos Y (1 octets)
+- 316 -> x chipset (1 octet ou 2 peut-être)
+- 320 -> y chipset (1 octet ou 2 peut-être)
+- 324 -> événement possible (1 octet)
+- 325 -> bloque joueur (1 octet)
+- 326 -> transparence (1 octet)
+- 327 -> suis le joueur (1 octet)
+- 328 -> type animation (1 octet)
+- 330 -> regard / si bas / s'arrête (1 octet)
+- 332 -> vitesse (1 octet)
+- 334 -> W (1 octet)
+- 336 -> H (1 octet)
+- 340 -> numéro anim / Si (1 octet)
