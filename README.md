@@ -9,8 +9,14 @@ ce repo permet juste de sauvegarder mon avancement et peut permettre au gens de 
 
 Les projets sont codé de la manière suivante :
 
-- (octet 1) La taille du nom de la map (X)
+- (octet 0) La taille du nom de la map (X)
 - (pendant X octet) Le nom de la map
+- (octet 51) Type de carte
+- (octet 52) Type d'effet
+- (octet 53) taille du chipset de fond (Z)
+- (pendant Z octets) chipset de fond
+- (octet 104) taille de la musique (L)
+- (pendant L octets) musique
 - (Jusque octet 155) 0x00
 - (octet 156) la taille du chipset (Y)
 - (pendant Y octet) chemin du chipset
@@ -18,6 +24,13 @@ Les projets sont codé de la manière suivante :
 - (octet 207) width
 - (octet 208) 0x00
 - (octet 209) height
+- (octet 261) mort du joueur, respawn, bool
+- (octet 262) Si Variable (2 octets)
+- (octet 264) Valeur comparaison (2 octets)
+- (octet 266) taille nom variable serveur (K)
+- (pendant K octets) nom variable serveur
+- (octet 522) taille nom valeur variable serveur (J)
+- (pendant J octets) valeur variable serveur
 - (jusque octet 777) 0x00
 
 ### Les cartes
